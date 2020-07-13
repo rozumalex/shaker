@@ -1,12 +1,87 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block title %}shaker.live{% endblock %}
 {% block description %}{% endblock %}
 {% block keywords %}{% endblock %}
 {% block head %}
-		<!--[if lte IE 8]><script src="{% static 'js/ie/html5shiv.js' %}"></script><![endif]-->
+		<!--[if lte IE 8]><script src="{% static 'radio/js/ie/html5shiv.js' %}"></script><![endif]-->
 		<link rel="stylesheet" href="{% static 'radio/css/main.css' %}">
-        <link rel="stylesheet" href="{% static 'css/player.css' %}">
+        <link rel="stylesheet" href="{% static 'radio/css/player.css' %}">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-		<!--[if lte IE 8]><link rel="stylesheet" href="{% static 'css/ie8.css' %}"><![endif]-->
-		<!--[if lte IE 9]><link rel="stylesheet" href="{% static 'css/ie9.css' %}"><![endif]-->
+		<!--[if lte IE 8]><link rel="stylesheet" href="{% static 'radio/css/ie8.css' %}"><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="{% static 'radio/css/ie9.css' %}"><![endif]-->
 {% endblock %}
+{% block content %}
+
+    <section id="auth-block">
+    {% if user.is_authenticated %}
+        <a href="">{{ user.username }}</a>
+        <a href="{% url 'logout' %}">logout</a>
+    {% else %}
+        <a href="{% url 'login' %}">login</a>
+        <a href="{% url 'accounts:signup' %}">signup</a>
+    {% endif %}
+    </section>
+
+    <section id="audio-player">
+        <h1 id="title">shaker.live</h1>
+        <div id="control-button-wrapper" class="hidden">
+            <div id="control-button"></div>
+            <audio id="player" controls preload="none"></audio>
+        </div>
+        <h2 id="song-title"></h2>
+    </section>
+
+    {% if user.is_authenticated %}
+        <section id="audio-upload">
+            <form action="{% url 'radio:index' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Upload">
+            </form>
+        </section>
+    {% endif %}
+    {% endblock %}
+
+    {% block footer %}
+        <ul class="icons">
+            <li><span id="location"></span> on air</li>
+
+            <li>&copy; shaker.live 2020 <span id="listeners"></span></li>
+    {% endblock %}
+<!--
+    <div id="audio-player">
+        <h1 id="title">shaker.live</h1>
+        <div id="button-container" class="hide">
+            <div id="button"></div>
+        </div>
+        <p><span id="song-title"></span></p>
+    </div>
+
+    <audio id="player" controls preload="none"></audio>
+
+    {% if user.is_authenticated %}
+    <form action="{% url 'radio:index' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+    {% endif %}
+
+        <ul class="icons">
+            <li><span id="location"></span><span class="live"> on air</span></li>
+            <li><a href="http://t.me/rozumalex" class="icon fa-telegram"><span class="label">Telegram</span></a></li>
+        </ul>
+        <ul class="copyright">
+            <li>&copy; <span id="name"></span></li><li>2020</li><li><span id="listeners"></span></li>
+        </ul>
+
+-->
+
+    {% block javascript %}
+        <!--[if lte IE 8]><script src="{% static 'radio/js/ie/respond.min.js' %}"></script><![endif]-->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="{% static 'radio/js/main.js' %}"></script>
+        <script src="{% static 'radio/js/player.js' %}"></script>
+    {% endblock %}
+

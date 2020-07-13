@@ -9,6 +9,8 @@
   <meta name="keywords" content="{% block keywords %}{% endblock %}">
   <meta name="description" content="{% block description %}{% endblock %}">
   <link rel="shortcut icon" href="{% static 'img/favicon-32x32.png' %}" type="image/png">
+  <link rel="stylesheet" href="{% static 'radio/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'radio/css/format.css' %}">
   {% block head %}
   {% endblock %}
 </head>
@@ -21,7 +23,7 @@
     {% block footer %}
     {% endblock %}
   </footer>
-    {% block scripts %}
+    {% block javascript %}
     {% endblock %}
 </body>
 </html>
