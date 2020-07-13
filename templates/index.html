@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block description %}{% endblock %}
+{% block keywords %}{% endblock %}
+{% block head %}
+		<!--[if lte IE 8]><script src="{% static 'js/ie/html5shiv.js' %}"></script><![endif]-->
+		<link rel="stylesheet" href="{% static 'radio/css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/player.css' %}">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!--[if lte IE 8]><link rel="stylesheet" href="{% static 'css/ie8.css' %}"><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="{% static 'css/ie9.css' %}"><![endif]-->
+{% endblock %}
