@@ -33,7 +33,7 @@ class IndexView(generic.edit.FormView):
         obj.album = track['album'][0]
         obj.year = track['date'][0]
         obj.genre = track['genre'][0]
-        obj.track_number = track['tracknumber'][0]
+        obj.track_number = track['tracknumber'][0].split('/')[0]
         obj.save()
 
         return super().form_valid(form)
