@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>{% block title %}{% endblock %}</title>
+  <title>{{ config.site_name }}</title>
   <meta name="keywords" content="{% block keywords %}{% endblock %}">
   <meta name="description" content="{% block description %}{% endblock %}">
   <link rel="shortcut icon" href="{% static 'img/favicon-32x32.png' %}" type="image/png">
@@ -21,16 +21,22 @@
 <body>
   <header>
     <a href="{% url 'radio:index' %}"><img src="{% static 'radio/img/shaker-logo.jpg' %}" class="logo" alt=""></a>
-    {% block header %}
-    {% endblock %}
+    <nav><a href="{% url 'radio:library' %}">Library</a>
+                {% if user.is_authenticated %}
+                <a href="">{{ user.username }}</a>
+                <a href="{% url 'logout' %}">logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">login</a>
+                <a href="{% url 'accounts:signup' %}">signup</a>
+            {% endif %}
+      </nav>
   </header>
   <main>
     {% block content %}
     {% endblock %}
   </main>
   <footer>
-    {% block footer %}
-    {% endblock %}
+    <a href="{% url 'radio:index' %}">{{ config.site_name }}</a>&nbsp;&copy; 2020 live from&nbsp;<span id="location"></span>
   </footer>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="{% static 'radio/js/bg.js' %}"></script>

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Track
+from .models import Track, SiteConfiguration
 
 
 class TrackAdmin(admin.ModelAdmin):
@@ -11,3 +11,4 @@ class TrackAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Track, TrackAdmin)
+admin.site.register(SiteConfiguration)

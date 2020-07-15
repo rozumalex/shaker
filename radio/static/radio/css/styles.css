@@ -33,6 +33,7 @@ main{
 
 section{
 	flex-direction: column;
+	flex-grow: 1;
 }
 
 
@@ -90,6 +91,10 @@ footer {
     bottom: 20px;
     left: 20px;
     position: absolute;
+}
+
+footer:hover{
+    opacity: 1;
 }
 
 #bg {

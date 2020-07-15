@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block description %}{% endblock %}
+{% block keywords %}{% endblock %}
+
+{% block content %}
+
+    <section>
+        <article>
+            <ul>
+                {% for track in tracks_list %}
+                    <li>{{ track.artist }} - {{ track.title }}</li>
+                {% endfor %}
+            </ul>
+        </article>
+        <article class="pagination">
+
+            {% if page.has_previous %}
+                {{ page.number }}
+            {% else %}
+                {{ page.number }}
+            {% endif %}
+
+            {% if page.has_next %}
+                {{ page.paginator.num_pages }}
+            {% else %}
+                {{ page.paginator.num_pages }}
+            {% endif %}
+        </article>
+    </section>
+
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'radio/js/player.js' %}"></script>
+{% endblock %}
+
