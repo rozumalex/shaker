@@ -6,10 +6,15 @@
 {% block content %}
 
     <section>
+        <aritcle>
+            <form action="{% url 'radio:library' %}" method="get">
+                <input name="q" type="text" placeholder="Search...">
+            </form>
+        </aritcle>
         <article>
             <ul>
                 {% for track in tracks_list %}
-                    <li>{{ track.artist }} - {{ track.title }}</li>
+                    <li>{{ forloop.counter }}. {{ track.artist }} - {{ track.title }} ({{ track.album }}, {{ track.year }})</li>
                 {% endfor %}
             </ul>
         </article>

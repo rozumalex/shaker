@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.shortcuts import reverse
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 from mutagen.easyid3 import EasyID3
 
@@ -11,7 +12,7 @@ from .models import Track, SiteConfiguration
 
 
 class IndexView(generic.edit.FormMixin, generic.ListView):
-    template_name = 'index.html'
+    template_name = 'radio/index.html'
     model = Track
     form_class = TrackUploadForm
     context_object_name = 'new_tracks_list'
@@ -57,8 +58,14 @@ class LibraryView(generic.ListView):
     template_name = 'radio/library.html'
     model = Track
     context_object_name = 'tracks_list'
-    ordering = ['-date_uploaded']
+    ordering = ['-artist', '-title']
 
-    def get_context_data(self, **kwargs):
-        kwargs['config'] = SiteConfiguration.objects.get()
-        return super(LibraryView, self).get_context_data(**kwargs)
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query == None:
+            query = ''
+        tracks_list = Track.objects.filter(
+            Q(title__icontains=query) | Q(artist__icontains=query) | Q(album__icontains=query) | Q(year__icontains=query)
+        )
+        return tracks_list
+

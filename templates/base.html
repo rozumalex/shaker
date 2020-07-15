@@ -8,7 +8,7 @@
   <title>{{ config.site_name }}</title>
   <meta name="keywords" content="{% block keywords %}{% endblock %}">
   <meta name="description" content="{% block description %}{% endblock %}">
-  <link rel="shortcut icon" href="{% static 'img/favicon-32x32.png' %}" type="image/png">
+  <link rel="shortcut icon" href="{% static 'radio/img/favicon.png' %}" type="image/png">
 
   <link rel="stylesheet" href="{% static 'radio/css/reset.css' %}">
   <link rel="stylesheet" href="{% static 'radio/css/format.css' %}">
@@ -20,7 +20,7 @@
 </head>
 <body>
   <header>
-    <a href="{% url 'radio:index' %}"><img src="{% static 'radio/img/shaker-logo.jpg' %}" class="logo" alt=""></a>
+    <a href="{% url 'radio:index' %}"><img src="{% static 'radio/img/logo.png' %}" class="logo" alt=""></a>
     <nav><a href="{% url 'radio:library' %}">Library</a>
                 {% if user.is_authenticated %}
                 <a href="">{{ user.username }}</a>
