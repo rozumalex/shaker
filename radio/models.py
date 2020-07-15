@@ -2,15 +2,6 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-import mutagen
-
-
-class SiteConfiguration(models.Model):
-    site_name = models.CharField(max_length=255, default='Site Name')
-
-    def __str__(self):
-        return 'site configuration'
-
 
 class Track(models.Model):
     file = models.FileField(upload_to='music/uploads/')

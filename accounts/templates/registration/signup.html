@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
+
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
+{% endblock %}
 
 {% block content %}
-<section id="login-section">
+<section>
+  <article class="auth">
 <h2>Sign up</h2>
 <form method="post">
   {% csrf_token %}
@@ -12,5 +19,6 @@
   {% endfor %}
   <button type="submit">Sign up</button>
 </form>
+    </article>
   </section>
-{% endblock content %}
+{% endblock %}

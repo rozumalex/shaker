@@ -7,7 +7,7 @@
 
     <section>
         <article class="radio">
-            <h1>{{ config.site_name }}</h1>
+            <h1>{{ site_name }}</h1>
             <div id="control-button-wrapper" class="hidden">
                 <div id="control-button"></div>
                 <audio id="player" controls preload="none"></audio>
@@ -52,11 +52,11 @@
             </ul>
         </article>
     </section>
-
 {% endblock %}
 
 
 {% block javascript %}
     <script src="{% static 'radio/js/player.js' %}"></script>
 {% endblock %}
+
 

@@ -1,1 +1,1 @@
-# shaker
+# shake the rocks is online radio station with oportunity to upload tracks

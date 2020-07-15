@@ -14,7 +14,7 @@ import os
 import environ
 
 
-root = environ.Path(__file__) - 3
+root = environ.Path(__file__) - 2
 env = environ.Env()
 environ.Env.read_env(env_file=os.path.join(root, '.env'))
 
@@ -40,7 +40,6 @@ ALLOWED_HOSTS = ['127.0.0.1', '159.69.109.149']
 # Application definition
 
 INSTALLED_APPS = [
-    'mptt',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,13 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'radio.middleware.GetConstantData',
 ]
-
-CACHES = {
-    'default': {
-        'TIMEOUT': 0,
-    }
-}
 
 
 ROOT_URLCONF = 'shaker.urls'
@@ -141,3 +135,9 @@ STATIC_URL = env.str('STATIC_URL', default='/static/')
 
 LOGIN_REDIRECT_URL = 'radio:index'
 LOGOUT_REDIRECT_URL = 'radio:index'
+
+SITE_CONFIG = {
+    'site_name': 'shake the rocks',
+    'charset': 'utf-8',
+    'lang': 'en',
+}

@@ -1,11 +1,11 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
-  <meta charset="utf-8">
+  <meta charset="{{ charset }}">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>{{ config.site_name }}</title>
+  <title>{{ site_name }}</title>
   <meta name="keywords" content="{% block keywords %}{% endblock %}">
   <meta name="description" content="{% block description %}{% endblock %}">
   <link rel="shortcut icon" href="{% static 'radio/img/favicon.png' %}" type="image/png">
@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="{% static 'radio/css/reset.css' %}">
   <link rel="stylesheet" href="{% static 'radio/css/format.css' %}">
   <link rel="stylesheet" href="{% static 'radio/css/forms.css' %}">
-<!--  <link rel="stylesheet" href="{% static 'radio/css/main.css' %}">-->
   <link rel="stylesheet" href="{% static 'radio/css/styles.css' %}">
   {% block head %}
   {% endblock %}
@@ -36,7 +35,7 @@
     {% endblock %}
   </main>
   <footer>
-    <a href="{% url 'radio:index' %}">{{ config.site_name }}</a>&nbsp;&copy; 2020 live from&nbsp;<span id="location"></span>
+    <a href="{% url 'radio:index' %}">{{ site_name }}</a>&nbsp;&copy; 2020 live from&nbsp;<span id="location">Minsk</span>
   </footer>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="{% static 'radio/js/bg.js' %}"></script>

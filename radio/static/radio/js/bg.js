@@ -33,7 +33,7 @@
 
 					// Images (in the format of 'url': 'alignment').
 						images: {
-							'http://127.0.0.1:8000/media/img/backgrounds/01.jpg': 'center',
+							'media/img/backgrounds/01.jpg': 'center',
 						},
 
 					// Delay.

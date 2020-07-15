@@ -8,7 +8,7 @@ from django.db.models import Q
 from mutagen.easyid3 import EasyID3
 
 from .forms import TrackUploadForm
-from .models import Track, SiteConfiguration
+from .models import Track
 
 
 class IndexView(generic.edit.FormMixin, generic.ListView):
@@ -19,11 +19,7 @@ class IndexView(generic.edit.FormMixin, generic.ListView):
     ordering = ['-date_uploaded']
     paginate_by = 5
 
-    def get_queryset(self):
-        return Track.objects.order_by('-date_uploaded')[:5]
-
     def get_context_data(self, **kwargs):
-        kwargs['config'] = SiteConfiguration.objects.get()
         kwargs['count_tracks'] = Track.objects.count()
         kwargs['active_users_list'] = User.objects.annotate(uploads=Count('user_uploaded')).order_by('-uploads')[:5]
         return super(IndexView, self).get_context_data(**kwargs)
