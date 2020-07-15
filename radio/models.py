@@ -14,6 +14,7 @@ class Track(models.Model):
     album = models.CharField(max_length=100)
     genre = models.CharField(max_length=20)
     year = models.IntegerField()
+    track_number = models.IntegerField()
 
     def __str__(self):
         return str(self.file)
