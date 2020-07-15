@@ -61,6 +61,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CACHES = {
+    'default': {
+        'TIMEOUT': 0,
+    }
+}
+
+
 ROOT_URLCONF = 'shaker.urls'
 
 TEMPLATES = [

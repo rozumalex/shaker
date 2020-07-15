@@ -9,12 +9,21 @@
   <meta name="keywords" content="{% block keywords %}{% endblock %}">
   <meta name="description" content="{% block description %}{% endblock %}">
   <link rel="shortcut icon" href="{% static 'img/favicon-32x32.png' %}" type="image/png">
+
   <link rel="stylesheet" href="{% static 'radio/css/reset.css' %}">
   <link rel="stylesheet" href="{% static 'radio/css/format.css' %}">
+  <link rel="stylesheet" href="{% static 'radio/css/forms.css' %}">
+<!--  <link rel="stylesheet" href="{% static 'radio/css/main.css' %}">-->
+  <link rel="stylesheet" href="{% static 'radio/css/styles.css' %}">
   {% block head %}
   {% endblock %}
 </head>
 <body>
+  <header>
+    <a href="{% url 'radio:index' %}"><img src="{% static 'radio/img/shaker-logo.jpg' %}" class="logo" alt=""></a>
+    {% block header %}
+    {% endblock %}
+  </header>
   <main>
     {% block content %}
     {% endblock %}
@@ -23,6 +32,8 @@
     {% block footer %}
     {% endblock %}
   </footer>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="{% static 'radio/js/bg.js' %}"></script>
     {% block javascript %}
     {% endblock %}
 </body>
