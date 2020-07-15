@@ -15,13 +15,12 @@ class IndexView(generic.edit.FormView):
     template_name = 'index.html'
     form_class = TrackUploadForm
     success_url = '/'
-    count_tracks = Track.objects.all().count()
+    # count_tracks = Track.objects.all().count()
     new_tracks_list = Track.objects.order_by('-date_uploaded')
     active_users_list = User.objects.annotate(uploads=Count('user_uploaded')).order_by('-uploads')[:5]
     extra_context = {
         'new_tracks_list': new_tracks_list,
         'active_users_list': active_users_list,
-        'count_tracks': count_tracks,
     }
 
     def form_valid(self, form):
