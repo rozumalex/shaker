@@ -126,9 +126,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 public_root = root.path('public/')
+
 MEDIA_ROOT = public_root('media/')
 MEDIA_URL = env.str('MEDIA_URL', default='/media/')
-
 
 STATIC_ROOT = public_root('static/')
 STATIC_URL = env.str('STATIC_URL', default='/static/')

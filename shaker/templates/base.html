@@ -21,7 +21,7 @@
   <header>
     <a href="{% url 'radio:index' %}"><img src="{% static 'radio/img/logo.png' %}" class="logo" alt=""></a>
     <nav><a href="{% url 'radio:library' %}">Library</a>
-                {% if user.is_authenticated %}
+            {% if user.is_authenticated %}
                 <a href="">{{ user.username }}</a>
                 <a href="{% url 'logout' %}">logout</a>
             {% else %}
