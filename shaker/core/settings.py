@@ -34,7 +34,7 @@ SECRET_KEY = env.str('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = [env.db('DATABASE_URL', default='127.0.0.1')]
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -62,7 +62,7 @@ MIDDLEWARE = [
 ]
 
 
-ROOT_URLCONF = 'shaker.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -80,7 +80,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'shaker.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
