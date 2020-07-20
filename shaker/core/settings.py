@@ -14,9 +14,9 @@ import os
 import environ
 
 
-root = environ.Path(__file__) - 2
+root = environ.Path(__file__) - 3
 env = environ.Env()
-environ.Env.read_env(env_file=os.path.join(root, '.env'))
+environ.Env.read_env(env_file=os.path.join(root, 'shaker/.env'))
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
