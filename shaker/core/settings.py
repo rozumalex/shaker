@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'radio.apps.RadioConfig',
     'accounts.apps.AccountsConfig',
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [
