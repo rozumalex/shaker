@@ -33,7 +33,7 @@
 
 					// Images (in the format of 'url': 'alignment').
 						images: {
-							'http://159.69.109.149:8000/media/img/backgrounds/01.jpg': 'center',
+							'https://shakethe.rocks/media/img/backgrounds/01.jpg': 'center',
 						},
 
 					// Delay.
