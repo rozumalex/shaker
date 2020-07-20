@@ -25,6 +25,7 @@ $(function () {
           "<li>" + data.result.artist + " - " + data.result.title + " uploaded by " + data.result.user_uploaded + "</li>"
         )
         $("#new-tracks li:last-child").remove();
+        $('#count-tracks').text(parseInt($('#count-tracks').text()) + 1);
       }
     }
   });
