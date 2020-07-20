@@ -17,10 +17,13 @@
 
     {% if user.is_authenticated %}
         <article>
-            <form action="{% url 'radio:index' %}" method="post" enctype="multipart/form-data">
+            <form id="track-upload-form" action="{% url 'radio:index' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form }}
-                <input type="submit" value="Upload">
+<!--                {{ form }}-->
+                <input id="trackupload" type="file" name="file" multiple
+                   style="display: none;"
+                   data-url="{% url 'radio:index' %}">
+                    <input type="button" class="upload-tracks" value="Upload Tracks">
             </form>
         </article>
     {% endif %}
@@ -36,7 +39,7 @@
 
         <article>
             <h3>New tracks:</h3>
-            <ul class="new-tracks">
+            <ul id="new-tracks">
                 {% for track in new_tracks_list %}
                     <li>{{ track.artist }} - {{ track.title }} uploaded by {{ track.user_uploaded }}</li>
                 {% endfor %}
@@ -56,7 +59,11 @@
 
 
 {% block javascript %}
-    <script src="{% static 'radio/js/player.js' %}"></script>
+  <script src="{% static 'radio/js/player.js' %}"></script>
+  <script src="{% static 'radio/js/jquery-file-upload/vendor/jquery.ui.widget.js' %}"></script>
+  <script src="{% static 'radio/js/jquery-file-upload/jquery.iframe-transport.js' %}"></script>
+  <script src="{% static 'radio/js/jquery-file-upload/jquery.fileupload.js' %}"></script>
+  <script src="{% static 'radio/js/track-upload.js' %}"></script>
 {% endblock %}
 
 

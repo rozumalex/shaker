@@ -47,4 +47,5 @@
       but.classList.remove( 'pause' );
       test = true;
     }
+
  }( document ));

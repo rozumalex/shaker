@@ -2,8 +2,8 @@ from django.views import generic
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.shortcuts import reverse
-from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse
 
 from mutagen.easyid3 import EasyID3
 
@@ -29,9 +29,10 @@ class IndexView(generic.edit.FormMixin, generic.ListView):
             return HttpResponseForbidden()
         form = self.get_form()
         if form.is_valid():
-            return self.form_valid(form)
+            data = self.form_valid(form)
         else:
-            return self.form_invalid(form)
+            data = {'is_valid': False}
+        return JsonResponse(data)
 
     def form_valid(self, form):
         track = EasyID3(self.request._files['file'])
@@ -44,7 +45,8 @@ class IndexView(generic.edit.FormMixin, generic.ListView):
         obj.genre = track['genre'][0]
         obj.track_number = track['tracknumber'][0].split('/')[0]
         obj.save()
-        return super().form_valid(form)
+        # return super().form_valid(form)
+        return {'is_valid': True, 'artist': obj.artist, 'title': obj.title, 'user_uploaded': obj.user_uploaded.username}
 
     def get_success_url(self):
         return reverse('radio:index')
