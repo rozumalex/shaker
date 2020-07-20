@@ -221,3 +221,7 @@ body.is-loading #bg {
     position: absolute;
     left: -999em;
  }
+
+#progress-info{
+    display: none;
+}

@@ -4,8 +4,22 @@ $(function () {
   });
 
   $("#trackupload").fileupload({
+
     dataType: 'json',
-    done: function (e, data) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
+    sequentialUploads: true,
+    start: function (e) {
+      $("#progress-info").show();
+    },
+    stop: function (e) {
+      $("#progress-info").hide();
+    },
+    progressall: function (e, data) {
+      var progress = parseInt(data.loaded / data.total * 100, 10);
+      var strProgress = progress + "%";
+      $(".progress").text(strProgress);
+    },
+
+    done: function (e, data) {
       if (data.result.is_valid) {
         $("#new-tracks").prepend(
           "<li>" + data.result.artist + " - " + data.result.title + " uploaded by " + data.result.user_uploaded + "</li>"

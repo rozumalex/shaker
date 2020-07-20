@@ -25,9 +25,13 @@
                    data-url="{% url 'radio:index' %}">
                     <input type="button" class="upload-tracks" value="Upload Tracks">
             </form>
-        </article>
-    {% endif %}
 
+        <div id="progress-info">
+                <h4 class="modal-title">Uploading: <span class="progress">0%</span></h4>
+        </div>
+
+    {% endif %}
+        </article>
     </section>
 
 
