@@ -5,14 +5,14 @@ certifi==2019.11.28
 chardet==3.0.4
 colorama==0.4.3
 contextlib2==0.6.0
-deprecation==2.1.0
 distlib==0.3.0
 distro==1.4.0
 Django==3.0.8
+django-cleanup==5.0.0
 django-environ==0.4.5
 django-js-asset==1.2.2
 django-mptt==0.11.0
-filetype==1.0.7
+gunicorn==20.0.4
 html5lib==1.0.1
 idna==2.8
 ipaddr==2.2.0
