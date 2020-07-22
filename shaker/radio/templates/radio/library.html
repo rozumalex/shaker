@@ -11,6 +11,7 @@
                 <input name="q" type="text" placeholder="Search...">
             </form>
         </aritcle>
+
         <article>
             <ul>
                 {% for track in tracks_list %}
@@ -18,25 +19,28 @@
                 {% endfor %}
             </ul>
         </article>
+
         <article class="pagination">
 
-            {% if page.has_previous %}
-                {{ page.number }}
-            {% else %}
-                {{ page.number }}
-            {% endif %}
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
 
-            {% if page.has_next %}
-                {{ page.paginator.num_pages }}
-            {% else %}
-                {{ page.paginator.num_pages }}
-            {% endif %}
+                <span class="current">
+                    page {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last</a>
+                {% endif %}
+            </span>
+
         </article>
     </section>
 
 {% endblock %}
 
-{% block javascript %}
-    <script src="{% static 'radio/js/player.js' %}"></script>
-{% endblock %}
 

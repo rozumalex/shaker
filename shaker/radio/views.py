@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.shortcuts import reverse
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 
 from mutagen.easyid3 import EasyID3
 
@@ -57,13 +57,14 @@ class LibraryView(generic.ListView):
     model = Track
     context_object_name = 'tracks_list'
     ordering = ['-artist', '-title']
+    paginate_by = 20
 
     def get_queryset(self):
         query = self.request.GET.get('q')
-        if query == None:
+        if query is None:
             query = ''
         tracks_list = Track.objects.filter(
-            Q(title__icontains=query) | Q(artist__icontains=query) | Q(album__icontains=query) | Q(year__icontains=query)
+            Q(title__icontains=query) | Q(artist__icontains=query) |
+            Q(album__icontains=query) | Q(year__icontains=query)
         )
         return tracks_list
-

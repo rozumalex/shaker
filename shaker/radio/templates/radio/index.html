@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block description %}{% endblock %}
 {% block keywords %}{% endblock %}
 
 {% block content %}
-
     <section>
         <article class="radio">
             <h1>{{ site_name }}</h1>
@@ -15,29 +15,25 @@
             <h3>Now Playing: <span id="song-title"></span></h3>
         </article>
 
-    {% if user.is_authenticated %}
-        <article>
-            <form id="track-upload-form" action="{% url 'radio:index' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-<!--                {{ form }}-->
-                <input id="trackupload" type="file" name="file" multiple
-                   style="display: none;"
-                   data-url="{% url 'radio:index' %}">
+        {% if user.is_authenticated %}
+            <article>
+                <form id="track-upload-form" action="{% url 'radio:index' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input id="trackupload" type="file" name="file" multiple style="display: none;"
+                           data-url="{% url 'radio:index' %}">
                     <input type="button" class="upload-tracks" value="Upload Tracks">
-            </form>
+                </form>
 
-        <div id="progress-info">
-                <h4 class="modal-title">Uploading: <span class="progress">0%</span></h4>
-        </div>
-
-    {% endif %}
-        </article>
+                <div id="progress-info">
+                        <h4 class="modal-title">Uploading: <span class="progress">0%</span></h4>
+                </div>
+            </article>
+        {% endif %}
     </section>
-
 
     <section class="stats">
         <article>
-            <h3>Listeners: <span id="listeners"></span></h3>
+            <h3>Listeners: <span id="listeners">0</span></h3>
             <h3>Tracks: <span id ="count-tracks">{{ count_tracks }}</span></h3>
         </article>
 
@@ -45,7 +41,9 @@
             <h3>New tracks:</h3>
             <ul id="new-tracks">
                 {% for track in new_tracks_list %}
-                    <li>{{ track.artist }} - {{ track.title }} uploaded by {{ track.user_uploaded }}</li>
+                    <li>
+                        {{ track.artist }} - {{ track.title }} uploaded by {{ track.user_uploaded }}
+                    </li>
                 {% endfor %}
             </ul>
         </article>
