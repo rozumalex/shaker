@@ -38,12 +38,31 @@ class IndexView(generic.edit.FormMixin, generic.ListView):
         track = EasyID3(self.request._files['file'])
         obj = form.save(commit=False)
         obj.user_uploaded = self.request.user
-        obj.title = track['title'][0]
-        obj.artist = track['artist'][0]
-        obj.album = track['album'][0]
-        obj.year = track['date'][0]
-        obj.genre = track['genre'][0]
-        obj.track_number = track['tracknumber'][0].split('/')[0]
+        try:
+            obj.title = track['title'][0]
+        except:
+            obj.title = 'Unknown'
+        try:
+            obj.artist = track['artist'][0]
+        except:
+            obj.artist = 'Unknown'
+        try:
+            obj.album = track['album'][0]
+        except:
+            obj.album = 'Unknown'
+        try:
+            obj.year = track['date'][0]
+        except:
+            obj.year = 0
+        try:
+            obj.genre = track['genre'][0]
+        except:
+            obj.genre = 'Other'
+        try:
+            obj.track_number = track['tracknumber'][0].split('/')[0]
+        except:
+            obj.track_number = 0
+
         obj.save()
         # return super().form_valid(form)
         return {'is_valid': True, 'artist': obj.artist, 'title': obj.title, 'user_uploaded': obj.user_uploaded.username}
