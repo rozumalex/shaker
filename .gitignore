@@ -1,7 +1,12 @@
+# Logs and media folders
 public/
-.idea/
 logs/
+
+# Config files
 *.liq
+
+# Pycharm Folder
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

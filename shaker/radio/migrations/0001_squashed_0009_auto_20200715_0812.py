@@ -8,7 +8,15 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    replaces = [('radio', '0001_initial'), ('radio', '0002_auto_20200713_2101'), ('radio', '0003_song_user_added'), ('radio', '0004_auto_20200714_0825'), ('radio', '0005_auto_20200714_1006'), ('radio', '0006_remove_song_year'), ('radio', '0007_auto_20200714_1024'), ('radio', '0008_auto_20200714_2058'), ('radio', '0009_auto_20200715_0812')]
+    replaces = [('radio', '0001_initial'),
+                ('radio', '0002_auto_20200713_2101'),
+                ('radio', '0003_song_user_added'),
+                ('radio', '0004_auto_20200714_0825'),
+                ('radio', '0005_auto_20200714_1006'),
+                ('radio', '0006_remove_song_year'),
+                ('radio', '0007_auto_20200714_1024'),
+                ('radio', '0008_auto_20200714_2058'),
+                ('radio', '0009_auto_20200715_0812')]
 
     initial = True
 
@@ -20,15 +28,21 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Track',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True,
+                                        serialize=False, verbose_name='ID')),
                 ('file', models.FileField(upload_to='music/uploads/')),
-                ('date_uploaded', models.DateTimeField(default=django.utils.timezone.now)),
+                ('date_uploaded', models.DateTimeField(
+                    default=django.utils.timezone.now)),
                 ('artist', models.CharField(max_length=100)),
                 ('title', models.CharField(max_length=100)),
                 ('album', models.CharField(max_length=100)),
                 ('genre', models.CharField(max_length=20)),
                 ('year', models.IntegerField()),
-                ('user_uploaded', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='user_uploaded', to=settings.AUTH_USER_MODEL)),
+                ('user_uploaded',
+                 models.ForeignKey(default=1,
+                                   on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='user_uploaded',
+                                   to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

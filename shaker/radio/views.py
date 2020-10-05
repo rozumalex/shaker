@@ -21,7 +21,8 @@ class IndexView(generic.edit.FormMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         kwargs['count_tracks'] = Track.objects.count()
-        kwargs['active_users_list'] = User.objects.annotate(uploads=Count('user_uploaded')).order_by('-uploads')[:5]
+        kwargs['active_users_list'] = User.objects.annotate(
+            uploads=Count('user_uploaded')).order_by('-uploads')[:5]
         return super(IndexView, self).get_context_data(**kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -40,32 +41,35 @@ class IndexView(generic.edit.FormMixin, generic.ListView):
         obj.user_uploaded = self.request.user
         try:
             obj.title = track['title'][0]
-        except:
+        except Exception:
             obj.title = 'Unknown'
         try:
             obj.artist = track['artist'][0]
-        except:
+        except Exception:
             obj.artist = 'Unknown'
         try:
             obj.album = track['album'][0]
-        except:
+        except Exception:
             obj.album = 'Unknown'
         try:
             obj.year = track['date'][0]
-        except:
+        except Exception:
             obj.year = 0
         try:
             obj.genre = track['genre'][0]
-        except:
+        except Exception:
             obj.genre = 'Other'
         try:
             obj.track_number = track['tracknumber'][0].split('/')[0]
-        except:
+        except Exception:
             obj.track_number = 0
 
         obj.save()
         # return super().form_valid(form)
-        return {'is_valid': True, 'artist': obj.artist, 'title': obj.title, 'user_uploaded': obj.user_uploaded.username}
+        return {'is_valid': True,
+                'artist': obj.artist,
+                'title': obj.title,
+                'user_uploaded': obj.user_uploaded.username}
 
     def get_success_url(self):
         return reverse('radio:index')

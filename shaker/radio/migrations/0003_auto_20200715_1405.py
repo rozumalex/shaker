@@ -13,8 +13,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SiteConifguration',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('site_name', models.CharField(default='Site Name', max_length=255)),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True,
+                                        serialize=False,
+                                        verbose_name='ID')),
+                ('site_name', models.CharField(default='Site Name',
+                                               max_length=255)),
             ],
         ),
         migrations.AlterField(
