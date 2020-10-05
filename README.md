@@ -1,6 +1,6 @@
 # shake the rocks
 
-[![Build Status](https://travis-ci.org/rozumalex/shaker.svg?branch=master)](https://travis-ci.org/github/triplinker/triplinker)
+[![Build Status](https://travis-ci.org/rozumalex/shaker.svg?branch=master)](https://travis-ci.org/github/rozumalex/shaker)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/triplinker/triplinker/blob/master/LICENSE)
 
 ---
@@ -53,5 +53,5 @@ sudo apt install postgresql libpq-dev
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/rozumalex/shaker/blob/master/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/rozumalex/shaker/blob/master/LICENSE) file for details.
 
