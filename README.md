@@ -20,6 +20,14 @@ please follow the instructions below.
 git clone https://github.com/rozumalex/shaker
 ```
 
+
+### Install postgresql
+
+```
+sudo apt install postgresql libpq-dev build-essential python3-dev
+
+```
+
 ### Install poetry
 
 ```
@@ -33,9 +41,10 @@ then you can run the command:
 
 ```
 poetry install
+poetry shell
 ```
 
-### Install icecast2
+### Install and configure icecast2
 
 ```
 sudo apt update
@@ -43,12 +52,31 @@ sudo apt upgrade
 sudo apt install icecast2
 ```
 
-
-### Install postgresql
+### Install liquidsoap
 
 ```
-sudo apt install postgresql libpq-dev
+sudo apt install liquidsoap
+```
 
+### Install certbot and get certificate
+
+```
+sudo apt install nginx
+sudo apt install snapd
+sudo snap install core
+sudo snap install --classic certbot
+sudo certbot --nginx -d example.com -d www.example.com
+sudo systemctl restart nginx
+```
+
+### Configure Ubutnu Firewall
+```
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw enable
 ```
 
 ## License
