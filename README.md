@@ -21,12 +21,18 @@ git clone https://github.com/rozumalex/shaker
 ```
 
 
-### Install postgresql
+### Install and configure postgresql
 
 ```
 sudo apt install postgresql libpq-dev build-essential python3-dev
-
+sudo su postgres
+psql
+CREATE ROLE user WITH ENCRYPTED PASSWORD 'password';
+CREATE DATABASE db_name;
+GRANT ALL PRIVILEGES ON DATABASE db_name TO user;
+ALTER ROLE user WITH LOGIN;
 ```
+***Note:*** Then press Ctrl+D
 
 ### Install poetry
 
@@ -77,6 +83,20 @@ sudo ufw allow ssh
 sudo ufw allow http
 sudo ufw allow https
 sudo ufw enable
+```
+
+### Create .env file in project's folder and configure it:
+```
+DEBUG=on
+SECRET_KEY="key"
+DATABASE_URL=psql://test:test@127.0.0.1:5432/test
+STATIC_URL=/static/
+MEDIA_URL=/media/
+```
+
+### Install gunicorn
+```
+sudo apt install gunicorn
 ```
 
 ## License
