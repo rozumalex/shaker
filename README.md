@@ -5,14 +5,16 @@
 
 ---
 
-Shake the rocks is online radio station with opportunity to upload tracks
+Shake The Rocks is online radio station with functionality of uploading tracks
 
 ## Installation Guide
 
 This is an example how to deploy that project to production.
 1. [Server Preparation](#server-preparation)
 2. [Domain Name Configuration](#domain-name-configuration)
-3. [Software Installation](#software-installation)
+3. [Icecast2 Installation](#isecast2)
+4. [Liquidsoap Installation](#liquidsoap)
+5. [Application Installation](#application-installation)
 
 ---
 
@@ -131,9 +133,7 @@ sudo systemctl restart nginx
 
 ---
 
-### Software Installation
-
-#### Icecast2
+### Icecast2
 
 Install icecast2:
 
@@ -225,71 +225,73 @@ Restart icecast2:
 sudo systemctl restart icecast2
 ```
 
+---
 
+### Liquidsoap
 
-
-
-
-
-
-
-
-
-
-#### Clone the application to your server
-
+Install liquidsoap:
 ```
-git clone https://github.com/rozumalex/shaker
+sudo apt install liquidsoap
 ```
 
-#### Install and configure postgresql
+### Application Installation
 
+Install and configure PostgreSQL
 ```
-sudo apt install postgresql libpq-dev build-essential python3-dev
+sudo apt install postgresql libpq-dev build-essential python3-dev psycopg2
 sudo su postgres
 psql
 CREATE ROLE user WITH ENCRYPTED PASSWORD 'password';
+ALTER ROLE user WITH LOGIN;
 CREATE DATABASE db_name;
 GRANT ALL PRIVILEGES ON DATABASE db_name TO user;
-ALTER ROLE user WITH LOGIN;
+\q
+su user
 ```
 
-#### Install poetry
-
+Install git:
 ```
-pip install poetry
+sudo apt install git
 ```
 
-#### Install dependencies
-
-***Note:*** you need to get to the directory with the project,
-then you can run the command: 
-
+Clone application:
 ```
+git clone https://github.com/rozumalex/shaker
+cd shaker
+```
+
+Install poetry and create virtualenv
+```
+sudo apt install python3-pip
+pip3 install poetry
+export PATH=$PATH:~/.local/bin
 poetry install
 poetry shell
 ```
 
-#### Install liquidsoap
-
+#### Create .env file:
 ```
-sudo apt install liquidsoap
-```
+cd shaker
+nano .env
 ```
 
-
-#### Create .env file in project's folder and configure it:
+Configure .env:
 ```
 DEBUG=on
 SECRET_KEY="key"
-DATABASE_URL=psql://test:test@127.0.0.1:5432/test
+DATABASE_URL=psql://user:password@127.0.0.1:5432/db_name
 STATIC_URL=/static/
 MEDIA_URL=/media/
 ```
 
-#### Install gunicorn
+Install gunicorn:
 ```
 sudo apt install gunicorn
+```
+
+Run the server:
+```
+gunicorn -w 5 --timeout 60 --max-requests 1 core.wsgi
 ```
 
 ## License
