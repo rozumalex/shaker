@@ -5,23 +5,23 @@
 
 ---
 
-Shake the rocks is online radio station with opportunity to upload tracks/
+Shake the rocks is online radio station with opportunity to upload tracks
 
 ## Installation Guide
 
+This is an example how to deploy that project to production.
+1. [Server Preparation](#server-preparation)
 
-If you want to get a copy of this project for your personal usage,
-please follow the instructions below.
+### Server Preparation
 
-
-### Clone the project to your local machine
+#### Clone the project to your local machine
 
 ```
 git clone https://github.com/rozumalex/shaker
 ```
 
 
-### Install and configure postgresql
+#### Install and configure postgresql
 
 ```
 sudo apt install postgresql libpq-dev build-essential python3-dev
@@ -34,13 +34,13 @@ ALTER ROLE user WITH LOGIN;
 ```
 ***Note:*** Then press Ctrl+D
 
-### Install poetry
+#### Install poetry
 
 ```
 pip install poetry
 ```
 
-### Install dependencies
+#### Install dependencies
 
 ***Note:*** you need to get to the directory with the project,
 then you can run the command: 
@@ -50,7 +50,7 @@ poetry install
 poetry shell
 ```
 
-### Install and configure icecast2
+#### Install and configure icecast2
 
 ```
 sudo apt update
@@ -58,13 +58,13 @@ sudo apt upgrade
 sudo apt install icecast2
 ```
 
-### Install liquidsoap
+#### Install liquidsoap
 
 ```
 sudo apt install liquidsoap
 ```
 
-### Install certbot and get certificate
+#### Install certbot and get certificate
 
 ```
 sudo apt install nginx
@@ -75,7 +75,7 @@ sudo certbot --nginx -d example.com -d www.example.com
 sudo systemctl restart nginx
 ```
 
-### Configure Ubutnu Firewall
+#### Configure Ubutnu Firewall
 ```
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
@@ -85,7 +85,7 @@ sudo ufw allow https
 sudo ufw enable
 ```
 
-### Create .env file in project's folder and configure it:
+#### Create .env file in project's folder and configure it:
 ```
 DEBUG=on
 SECRET_KEY="key"
@@ -94,7 +94,7 @@ STATIC_URL=/static/
 MEDIA_URL=/media/
 ```
 
-### Install gunicorn
+#### Install gunicorn
 ```
 sudo apt install gunicorn
 ```
