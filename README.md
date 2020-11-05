@@ -11,7 +11,8 @@ Shake the rocks is online radio station with opportunity to upload tracks
 
 This is an example how to deploy that project to production.
 1. [Server Preparation](#server-preparation)
-2. [Domain Name Configuration](#domain-name-configuration
+2. [Domain Name Configuration](#domain-name-configuration)
+3. [Software Installation](#software-installation)
 
 ---
 
@@ -98,6 +99,8 @@ sudo ufw default allow outgoing
 sudo ufw allow ssh
 sudo ufw allow http
 sudo ufw allow https
+sudo ufw allow 8080/tcp
+sudo ufw allow 8443/tcp
 sudo ufw enable
 ```
 
@@ -124,15 +127,120 @@ sudo snap install core
 sudo snap install --classic certbot
 sudo certbot --nginx -d example.com -d www.example.com
 sudo systemctl restart nginx
+```
+
+---
+
+### Software Installation
+
+#### Icecast2
+
+Install icecast2:
+
+```
+sudo apt install icecast2
+
+sudo su
+cd /etc/letsencrypt/live/example.com
+cat fullchain.pem privkey.pem > /usr/share/icecast2/fullchain.pem
+chmod 666 /usr/share/icecast2/fullchain.pem
+sudo user
+
+sudo nano /etc/icecast2/icecast.xml
+```
+
+Configure icecast.xml:
+```
+<icecast>
+    <location>City</location>
+    <admin>email@example.com</admin>\
+    
+    <limits>
+        <clients>100</clients>
+        <sources>2</sources>
+        <queue-size>524288</queue-size>
+        <client-timeout>30</client-timeout>
+        <header-timeout>15</header-timeout>
+        <source-timeout>10</source-timeout>
+        <burst-on-connect>1</burst-on-connect>
+        <burst-size>65535</burst-size>
+    </limits>
+
+    <authentication>
+        <source-password>new-source-password</source-password>
+        <relay-password>new-relay-password</relay-password>
+        <admin-user>new-admin-name</admin-user>
+        <admin-password>new-admin-password</admin-password>
+    </authentication>
+    
+    <hostname>ip</hostname>
+
+    <listen-socket>
+        <port>8080</port>
+    </listen-socket>
+
+    <listen-socket>
+        <port>8443</port>
+        <ssl>1</ssl>
+    </listen-socket>
+
+    <http-headers>
+        <header name="Access-Control-Allow-Origin" value="*" />
+    </http-headers>
+
+    <mount>
+        <mount-name>/stream</mount-name>
+        <charset>UTF-8</charset>
+    </mount>
+
+    <fileserve>1</fileserve>
+
+    <paths>
+        <basedir>/usr/share/ice2</basedir>
+        <logdir>/var/log/icecast2</logdir>
+        <webroot>/usr/share/icecast2/web</webroot>
+        <adminroot>/usr/share/icecast2/admin</adminroot>
+
+        <alias source="/" destination="/status.xsl"/>
+
+        <ssl-certificate>/usr/share/icecast2/fullchain.pem</ssl-certificate>
+        
+    </paths>
+
+    <logging>
+        <accesslog>access.log</accesslog>
+        <errorlog>error.log</errorlog>
+        <loglevel>3</loglevel>
+        <logsize>10000</logsize>
+    </logging>
+
+    <security>
+        <chroot>0</chroot>
+    </security>
+</icecast>
+```
+
+Restart icecast2:
+```
+sudo systemctl restart icecast2
+```
 
 
 
-#### Clone the project to your local machine
+
+
+
+
+
+
+
+
+
+#### Clone the application to your server
 
 ```
 git clone https://github.com/rozumalex/shaker
 ```
-
 
 #### Install and configure postgresql
 
@@ -145,7 +253,6 @@ CREATE DATABASE db_name;
 GRANT ALL PRIVILEGES ON DATABASE db_name TO user;
 ALTER ROLE user WITH LOGIN;
 ```
-***Note:*** Then press Ctrl+D
 
 #### Install poetry
 
@@ -161,14 +268,6 @@ then you can run the command:
 ```
 poetry install
 poetry shell
-```
-
-#### Install and configure icecast2
-
-```
-sudo apt update
-sudo apt upgrade
-sudo apt install icecast2
 ```
 
 #### Install liquidsoap
