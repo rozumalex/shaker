@@ -239,14 +239,12 @@ sudo apt install liquidsoap
 Install and configure PostgreSQL
 ```
 sudo apt install postgresql libpq-dev build-essential python3-dev psycopg2
-sudo su postgres
-psql
+sudo -u postgres psql
 CREATE ROLE user WITH ENCRYPTED PASSWORD 'password';
 ALTER ROLE user WITH LOGIN;
 CREATE DATABASE db_name;
 GRANT ALL PRIVILEGES ON DATABASE db_name TO user;
 \q
-su user
 ```
 
 Install git:
@@ -282,12 +280,97 @@ SECRET_KEY="key"
 DATABASE_URL=psql://user:password@127.0.0.1:5432/db_name
 STATIC_URL=/static/
 MEDIA_URL=/media/
+ALLOWED_HOSTS=127.0.0.1, ip, example.com
+```
+
+Configure nginx:
+```
+sudo nano /etc/nginx/sites-available/default
+```
+
+Edit default:
+```
+server {
+	   listen 80 default_server;
+	   listen [::]:80 default_server;
+	   server_name ip;
+
+        location /media/ {
+                 root home/user/shaker/public;
+                 expires 30d;
+        }
+
+        location /static/ {
+                 root home/user/shaker/public;
+                 expires 30d;
+        }
+
+	   location / {
+		       proxy_pass http://127.0.0.1:8000;
+	   }
+}
+
+
+server {
+        location /media/ {
+                root /home/user/shaker/public;
+                expires 30d;
+        }
+
+        location /static/ {
+                root /home/user/shaker/public;
+                expires 30d;
+        }
+
+	   location / {
+		      proxy_pass http://ip:8000;
+	   }
+
+        listen [::]:443 ssl ipv6only=on;
+        listen 443 ssl;
+        ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+        include /etc/letsencrypt/options-ssl-nginx.conf;
+        ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+server {
+        if ($host = www.example.com) {
+            return 301 https://$host$request_uri;
+        }
+
+        if ($host = example.com) {
+            return 301 https://$host$request_uri;
+        }
+
+        listen 80 ;
+        listen [::]:80 ;
+        server_name www.example.com example.com;
+        return 404; #
+}
+```
+
+Restart nginx:
+```
+sudo systemctl restart nginx
 ```
 
 Install gunicorn:
 ```
 sudo apt install gunicorn
 ```
+
+Configure nginx:
+```
+sudo nano /etc/nginx/sites-available/shaketherocks
+```
+
+Prepare application:
+```
+python manage.py migrate
+python manage.py collectstatic
+```
+
 
 Run the server:
 ```
