@@ -45,6 +45,9 @@ To see the public part of the key, use the following command from the home direc
 cat ~/.ssh/id_rsa.pub
 ```
 
+---
+
+
 #### Configure Access Rights
 
 Connect to the server and create a new user:
@@ -103,6 +106,9 @@ sudo apt upgrade
 sudo reboot
 ```
 
+---
+
+
 #### Configure Ubuntu Firewall
 
 Connect to the server and configure ufw:
@@ -131,6 +137,9 @@ Type      Host  Value TTL
 A Record  @     ip    Automatic
 A Record  www   ip    Automatic
 ```
+
+---
+
 
 #### SSL Certificate
 
@@ -326,6 +335,9 @@ MEDIA_URL=/media/
 ALLOWED_HOSTS=127.0.0.1, ip, example.com
 ```
 
+---
+
+
 #### Nginx
 
 Configure nginx:
@@ -399,6 +411,9 @@ Restart nginx:
 ```
 sudo systemctl restart nginx
 ```
+
+---
+
 
 #### Application
 
