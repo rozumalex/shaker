@@ -17,3 +17,7 @@ class Track(models.Model):
 
     def __str__(self):
         return str(self.file)
+
+
+class Background(models.Model):
+    image = models.ImageField(upload_to='images/backgrounds/')

@@ -23,9 +23,9 @@
 			// Settings.
 				var settings = {
 
-					// Images (in the format of 'url': 'alignment').
+				//	 Images (in the format of 'url': 'alignment').
 						images: {
-							'https://shakethe.rocks/media/img/backgrounds/01.jpg': 'center',
+							'https://shakethe.rocks/media/images/backgrounds/01.jpg': 'center',
 						},
 
 					// Delay.

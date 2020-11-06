@@ -3,12 +3,14 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.shortcuts import reverse
 from django.db.models import Q
-from django.http import JsonResponse, HttpResponseForbidden
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
 
+import json
+import random
 from mutagen.easyid3 import EasyID3
 
 from .forms import TrackUploadForm
-from .models import Track
+from .models import Track, Background
 
 
 class IndexView(generic.edit.FormMixin, generic.ListView):
@@ -91,3 +93,21 @@ class LibraryView(generic.ListView):
             Q(album__icontains=query) | Q(year__icontains=query)
         )
         return tracks_list
+
+
+    class BackgroundView(generic.DeleteView):
+        template_name = 'radio/background.html'
+        model = Background
+        context_object_name = 'background'
+
+
+def get_background(request):
+    bg = random.choice(Background.objects.all())
+    return HttpResponse(bg.image, content_type='image/png')
+
+
+def get_backgrounds_list(request):
+    bg_dict = {}
+    for background  in Background.objects.all():
+        bg_dict[f'https://{request.get_host()}/{background.image}'] = 'center'
+    return HttpResponse(json.dumps(bg_dict), content_type="application/json")
