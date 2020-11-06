@@ -3,22 +3,35 @@
 [![Build Status](https://travis-ci.org/rozumalex/shaker.svg?branch=master)](https://travis-ci.org/github/rozumalex/shaker)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/rozumalex/shaker/blob/master/LICENSE)
 
+Shake The Rocks is online radio station with functionality of uploading tracks
+
 ---
 
-Shake The Rocks is online radio station with functionality of uploading tracks
 
 ## Installation Guide
 
 This is an example how to deploy that project to production.
-1. [Server Preparation](#server-preparation)
-2. [Domain Name Configuration](#domain-name-configuration)
-3. [Icecast2 Installation](#isecast2)
-4. [Liquidsoap Installation](#liquidsoap)
-5. [Application Installation](#application-installation)
+1. [Prepare a Server](#prepare-a-server)
+  1.1 [Create a VPS](#create-a-vps)
+  1.2 [Configure Access Rights](#configure-access-rights)
+  1.3 [Configure Ubuntu Firewall](#configure-ubuntu-firewall)
+2. [Configure a Domain Name](#configure-a-domain-name)
+  2.1 [DNS Settings](#dns-settings)
+  2.2 [SSL Certificate](#ssl-certificate)
+3. [Install Icecast2](#install-isecast2)
+4. [Install Liquidsoap](#install-liquidsoap)
+5. [Install PostgreSQL](#install-postgresql)
+6. [Install Git](#install-git)
+7. [Install Poetry](#install-poetry)
+8. [Install Gunicorn](#install-gunicorn)
+9. [Configure the Application](configure-the-application)
+  9.1 [Env](#env)
+  9.2 [Nginx](#nginx)
+10. [Run the Application](#run-the-application)
 
 ---
 
-### Server Preparation
+### Prepare a Server
 
 #### Create a VPS
 
@@ -27,12 +40,12 @@ Add your ssh key while creating a server. If you don't have one, generate it:
 ssh-keygen -t rsa -b 4096 -C "email@example.com"
 ```
 
-To see the public part of the key, use the following command from the home directory(if you used default key's file name):
+To see the public part of the key, use the following command from the home directory(if you used default key's file name and directory):
 ```
-cat .ssh/id_rsa.pub
+cat ~/.ssh/id_rsa.pub
 ```
 
-#### Create a new user and configure connection via ssh
+#### Configure Access Rights
 
 Connect to the server and create a new user:
 ```
@@ -47,11 +60,10 @@ Disconnect form the server and add the ssh key to the created user:
 ssh-copy-id -i ~/.ssh/id_rsa user@ip
 ```
 
-Connect to the server as root and remove the ssh key:
+Connect to the server as root and remove it's ssh key:
 ```
 ssh root@ip
-cd ~/.ssh
-rm authorized_keys
+rm ~/.ssh/authorized_keys
 ```
 
 Reconnect to the server as user and edit sshd_config:
@@ -60,7 +72,7 @@ ssh user@ip
 sudo nano /etc/ssh/sshd_config
 ```
 
-Edit the next lines:
+Edit the following lines:
 ```
 PubkeyAuthentication yes
 PermitRootLogin no
@@ -71,12 +83,12 @@ Restart sshd.service:
 sudo systemctl restart sshd.service
 ```
 
-Disconnect from the server and edit ssh's config for quick connection on your local machine:
+Disconnect from the server and edit ssh's config on your local machine for quick connection:
 ```
 sudo nano ~/.ssh/config
 ```
 
-Insert the next lines:
+Insert the following lines:
 ```
 Host servername
      HostName ip
@@ -93,7 +105,7 @@ sudo reboot
 
 #### Configure Ubuntu Firewall
 
-Connect to the server and configure:
+Connect to the server and configure ufw:
 ```
 ssh servername
 sudo ufw default deny incoming
@@ -108,23 +120,23 @@ sudo ufw enable
 
 ---
 
-### Domain Name Configuration
 
-#### Get a domain name
+### Configure a Domain Name
 
-Manage DNS settings of your domain and create following records:
+#### DNS Stettings
+
+Manage DNS settings of your domain and add the following records:
 ```
 Type      Host  Value TTL
 A Record  @     ip    Automatic
 A Record  www   ip    Automatic
 ```
 
-#### Get SSL Certificate
+#### SSL Certificate
 
-Install certbot and get certificate:
+Install certbot and create a certificate:
 ```
-sudo apt install nginx
-sudo apt install snapd
+sudo apt install nginx snapd
 sudo snap install core
 sudo snap install --classic certbot
 sudo certbot --nginx -d example.com -d www.example.com
@@ -133,10 +145,10 @@ sudo systemctl restart nginx
 
 ---
 
-### Icecast2
+
+### Install Icecast2
 
 Install icecast2:
-
 ```
 sudo apt install icecast2
 
@@ -227,16 +239,20 @@ sudo systemctl restart icecast2
 
 ---
 
-### Liquidsoap
+
+### Install Liquidsoap
 
 Install liquidsoap:
 ```
 sudo apt install liquidsoap
 ```
 
-### Application Installation
+---
 
-Install and configure PostgreSQL
+
+### Install PostgreSQL
+
+Install and configure PostgreSQL:
 ```
 sudo apt install postgresql libpq-dev build-essential python3-dev psycopg2
 sudo -u postgres psql
@@ -247,18 +263,28 @@ GRANT ALL PRIVILEGES ON DATABASE db_name TO user;
 \q
 ```
 
+---
+
+
+### Install Git
+
 Install git:
 ```
 sudo apt install git
 ```
 
-Clone application:
+Clone the application:
 ```
 git clone https://github.com/rozumalex/shaker
 cd shaker
 ```
 
-Install poetry and create virtualenv
+---
+
+
+### Install Poetry 
+
+Install poetry and create virtualenv:
 ```
 sudo apt install python3-pip
 pip3 install poetry
@@ -267,7 +293,24 @@ poetry install
 poetry shell
 ```
 
-#### Create .env file:
+---
+
+
+### Install Gunicorn:
+
+Install gunicorn:
+```
+sudo apt install gunicorn
+```
+
+---
+
+
+### Configure the Application
+
+#### Env
+
+Create .env file:
 ```
 cd shaker
 nano .env
@@ -282,6 +325,8 @@ STATIC_URL=/static/
 MEDIA_URL=/media/
 ALLOWED_HOSTS=127.0.0.1, ip, example.com
 ```
+
+#### Nginx
 
 Configure nginx:
 ```
@@ -355,15 +400,7 @@ Restart nginx:
 sudo systemctl restart nginx
 ```
 
-Install gunicorn:
-```
-sudo apt install gunicorn
-```
-
-Configure nginx:
-```
-sudo nano /etc/nginx/sites-available/shaketherocks
-```
+#### Application
 
 Prepare application:
 ```
@@ -371,11 +408,18 @@ python manage.py migrate
 python manage.py collectstatic
 ```
 
+---
 
-Run the server:
+
+### Run the Application
+
+Run:
 ```
-gunicorn -w 5 --timeout 60 --max-requests 1 core.wsgi
+gunicorn -w 3 --timeout 60 --max-requests 1 core.wsgi
 ```
+
+---
+
 
 ## License
 
