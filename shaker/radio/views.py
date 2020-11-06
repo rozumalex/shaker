@@ -95,12 +95,6 @@ class LibraryView(generic.ListView):
         return tracks_list
 
 
-    class BackgroundView(generic.DeleteView):
-        template_name = 'radio/background.html'
-        model = Background
-        context_object_name = 'background'
-
-
 def get_background(request):
     bg = random.choice(Background.objects.all())
     return HttpResponse(bg.image, content_type='image/png')
@@ -108,6 +102,6 @@ def get_background(request):
 
 def get_backgrounds_list(request):
     bg_dict = {}
-    for background  in Background.objects.all():
+    for background in Background.objects.all():
         bg_dict[f'https://{request.get_host()}/{background.image}'] = 'center'
     return HttpResponse(json.dumps(bg_dict), content_type="application/json")
