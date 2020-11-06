@@ -10,24 +10,24 @@ Shake The Rocks is online radio station with functionality of uploading tracks
 
 ## Installation Guide
 
-This is an example how to deploy that project to production.
-1. [Prepare a Server](#prepare-a-server)
-  1.1 [Create a VPS](#create-a-vps)
-  1.2 [Configure Access Rights](#configure-access-rights)
-  1.3 [Configure Ubuntu Firewall](#configure-ubuntu-firewall)
-2. [Configure a Domain Name](#configure-a-domain-name)
-  2.1 [DNS Settings](#dns-settings)
-  2.2 [SSL Certificate](#ssl-certificate)
-3. [Install Icecast2](#install-isecast2)
-4. [Install Liquidsoap](#install-liquidsoap)
-5. [Install PostgreSQL](#install-postgresql)
-6. [Install Git](#install-git)
-7. [Install Poetry](#install-poetry)
-8. [Install Gunicorn](#install-gunicorn)
-9. [Configure the Application](configure-the-application)
-  9.1 [Env](#env)
-  9.2 [Nginx](#nginx)
-10. [Run the Application](#run-the-application)
+This is an example how to deploy that project to production.  
+1. [Prepare a Server](#prepare-a-server)  
+  1.1 [Create a VPS](#create-a-vps)  
+  1.2 [Configure Access Rights](#configure-access-rights)  
+  1.3 [Configure Ubuntu Firewall](#configure-ubuntu-firewall)  
+2. [Configure a Domain Name](#configure-a-domain-name)  
+  2.1 [DNS Settings](#dns-settings)  
+  2.2 [SSL Certificate](#ssl-certificate)  
+3. [Install Icecast2](#install-icecast2)  
+4. [Install Liquidsoap](#install-liquidsoap)  
+5. [Install PostgreSQL](#install-postgresql)  
+6. [Install Git](#install-git)  
+7. [Install Poetry](#install-poetry)  
+8. [Install Gunicorn](#install-gunicorn)  
+9. [Configure the Application](configure-the-application)  
+  9.1 [Env](#env)  
+  9.2 [Nginx](#nginx)  
+10. [Run the Application](#run-the-application)  
 
 ---
 
@@ -123,7 +123,7 @@ sudo ufw enable
 
 ### Configure a Domain Name
 
-#### DNS Stettings
+#### DNS Settings
 
 Manage DNS settings of your domain and add the following records:
 ```
