@@ -33,6 +33,9 @@ This is an example how to deploy that project to production.
 
 ### Prepare a Server
 
+---
+
+
 #### Create a VPS
 
 Add your ssh key while creating a server. If you don't have one, generate it:
@@ -128,6 +131,9 @@ sudo ufw enable
 
 
 ### Configure a Domain Name
+
+---
+
 
 #### DNS Settings
 
@@ -316,6 +322,9 @@ sudo apt install gunicorn
 
 
 ### Configure the Application
+
+---
+
 
 #### Env
 
