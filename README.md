@@ -19,11 +19,11 @@ This is an example how to deploy that project to production.
   2.1 [DNS Settings](#dns-settings)  
   2.2 [SSL Certificate](#ssl-certificate)  
 3. [Install Icecast2](#install-icecast2)  
-4. [Install Liquidsoap](#install-liquidsoap)  
-5. [Install PostgreSQL](#install-postgresql)  
-6. [Install Git](#install-git)  
-7. [Install Poetry](#install-poetry)  
-8. [Install Gunicorn](#install-gunicorn)  
+4. [Install Liquidsoap](#install-liquidsoap) 
+5. [Install Gunicorn](#install-gunicorn) 
+6. [Install PostgreSQL](#install-postgresql)  
+7. [Install Git](#install-git)  
+8. [Install Poetry](#install-poetry)    
 9. [Configure the Application](configure-the-application)  
   9.1 [Env](#env)  
   9.2 [Nginx](#nginx)  
@@ -34,6 +34,8 @@ This is an example how to deploy that project to production.
 ### Prepare a Server
 
 ---
+
+Requirements: Ubuntu 20.04
 
 
 #### Create a VPS
@@ -80,8 +82,9 @@ sudo nano /etc/ssh/sshd_config
 
 Edit the following lines:
 ```
-PubkeyAuthentication yes
 PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentication no
 ```
 
 Restart sshd.service:
@@ -89,7 +92,7 @@ Restart sshd.service:
 sudo systemctl restart sshd.service
 ```
 
-Disconnect from the server and edit ssh's config on your local machine for quick connection:
+Disconnect from the server and edit ssh config on your local machine for quick connection:
 ```
 sudo nano ~/.ssh/config
 ```
@@ -169,9 +172,9 @@ sudo apt install icecast2
 
 sudo su
 cd /etc/letsencrypt/live/example.com
-cat fullchain.pem privkey.pem > /usr/share/icecast2/fullchain.pem
-chmod 666 /usr/share/icecast2/fullchain.pem
-sudo user
+cat fullchain.pem privkey.pem > /usr/share/icecast2/icecast.pem
+chmod 666 /usr/share/icecast2/icecast.pem
+su user
 
 sudo nano /etc/icecast2/icecast.xml
 ```
@@ -259,7 +262,26 @@ sudo systemctl restart icecast2
 
 Install liquidsoap:
 ```
-sudo apt install liquidsoap
+mkdir ~/opam
+cd ~/opam
+sudo wget https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh
+sudo chmod +x install.sh
+sudo ./install.sh
+
+sudo apt install m4 unzip bubblewrap make ocaml
+opam init --compiler=4.07.0
+opam depext taglib mad lame vorbis cry samplerate liquidsoap
+opam install taglib mad lame vorbis cry samplerate liquidsoap
+```
+
+---
+
+
+### Install Gunicorn:
+
+Install gunicorn:
+```
+sudo apt install gunicorn
 ```
 
 ---
@@ -269,7 +291,7 @@ sudo apt install liquidsoap
 
 Install and configure PostgreSQL:
 ```
-sudo apt install postgresql libpq-dev build-essential python3-dev psycopg2
+sudo apt install postgresql libpq-dev build-essential python3-dev
 sudo -u postgres psql
 CREATE ROLE user WITH ENCRYPTED PASSWORD 'password';
 ALTER ROLE user WITH LOGIN;
@@ -286,10 +308,14 @@ GRANT ALL PRIVILEGES ON DATABASE db_name TO user;
 Install git:
 ```
 sudo apt install git
+git config --global user.name "Name Surname"
+git config --global user.email "email@example.com"
+
 ```
 
 Clone the application:
 ```
+cd ~
 git clone https://github.com/rozumalex/shaker
 cd shaker
 ```
@@ -304,18 +330,9 @@ Install poetry and create virtualenv:
 sudo apt install python3-pip
 pip3 install poetry
 export PATH=$PATH:~/.local/bin
+poetry config virtualenvs.in-project true
 poetry install
 poetry shell
-```
-
----
-
-
-### Install Gunicorn:
-
-Install gunicorn:
-```
-sudo apt install gunicorn
 ```
 
 ---
@@ -357,10 +374,11 @@ sudo nano /etc/nginx/sites-available/default
 Edit default:
 ```
 server {
-	   listen 80 default_server;
-	   listen [::]:80 default_server;
-	   server_name ip;
+	listen 80 default_server;
+	listen [::]:80 default_server;
 
+	server_name ip;	
+	
         location /media/ {
                  root home/user/shaker/public;
                  expires 30d;
@@ -371,13 +389,14 @@ server {
                  expires 30d;
         }
 
-	   location / {
-		       proxy_pass http://127.0.0.1:8000;
-	   }
+	location / {
+                 proxy_pass http://127.0.0.1:8000;
+        }
 }
 
-
 server {
+        server_name example.com www.example.com;
+
         location /media/ {
                 root /home/user/shaker/public;
                 expires 30d;
@@ -388,31 +407,31 @@ server {
                 expires 30d;
         }
 
-	   location / {
-		      proxy_pass http://ip:8000;
-	   }
+	location / {
+		proxy_pass http://127.0.0.1:8000;
+	}
 
-        listen [::]:443 ssl ipv6only=on;
-        listen 443 ssl;
-        ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
-        include /etc/letsencrypt/options-ssl-nginx.conf;
-        ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    listen [::]:443 ssl ipv6only=on;
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    client_max_body_size 30m;
 }
-
 server {
-        if ($host = www.example.com) {
-            return 301 https://$host$request_uri;
-        }
+    if ($host = www.example.com) {
+        return 301 https://$host$request_uri;
+    }
 
-        if ($host = example.com) {
-            return 301 https://$host$request_uri;
-        }
+    if ($host = example.com) {
+        return 301 https://$host$request_uri;
+    }
 
-        listen 80 ;
-        listen [::]:80 ;
-        server_name www.example.com example.com;
-        return 404; #
+	listen 80 ;
+	listen [::]:80 ;
+    server_name example.com www.example.com;
+    return 404;
 }
 ```
 

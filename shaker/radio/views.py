@@ -105,3 +105,4 @@ def get_backgrounds_list(request):
     for background in Background.objects.all():
         bg_dict[f'https://{request.get_host()}/{background.image}'] = 'center'
     return HttpResponse(json.dumps(bg_dict), content_type="application/json")
+
