@@ -19,11 +19,11 @@ This is an example how to deploy that project to production.
   2.1 [DNS Settings](#dns-settings)  
   2.2 [SSL Certificate](#ssl-certificate)  
 3. [Install Icecast2](#install-icecast2)  
-4. [Install Liquidsoap](#install-liquidsoap) 
-5. [Install Gunicorn](#install-gunicorn) 
-6. [Install PostgreSQL](#install-postgresql)  
-7. [Install Git](#install-git)  
-8. [Install Poetry](#install-poetry)    
+4. [Install Gunicorn](#install-gunicorn) 
+5. [Install PostgreSQL](#install-postgresql)  
+6. [Install Git](#install-git)  
+7. [Install Poetry](#install-poetry)    
+8. [Install Liquidsoap](#install-liquidsoap) 
 9. [Configure the Application](configure-the-application)  
   9.1 [Env](#env)  
   9.2 [Nginx](#nginx)  
@@ -258,25 +258,6 @@ sudo systemctl restart icecast2
 ---
 
 
-### Install Liquidsoap
-
-Install liquidsoap:
-```
-mkdir ~/opam
-cd ~/opam
-sudo wget https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh
-sudo chmod +x install.sh
-sudo ./install.sh
-
-sudo apt install m4 unzip bubblewrap make ocaml
-opam init --compiler=4.07.0
-opam depext taglib mad lame vorbis cry samplerate liquidsoap
-opam install taglib mad lame vorbis cry samplerate liquidsoap
-```
-
----
-
-
 ### Install Gunicorn:
 
 Install gunicorn:
@@ -333,6 +314,86 @@ export PATH=$PATH:~/.local/bin
 poetry config virtualenvs.in-project true
 poetry install
 poetry shell
+```
+
+---
+
+
+### Install Liquidsoap
+
+Install liquidsoap:
+```
+mkdir ~/opam
+cd ~/opam
+sudo wget https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh
+sudo chmod +x install.sh
+sudo ./install.sh
+
+sudo apt install m4 unzip bubblewrap make ocaml
+opam init --compiler=4.07.0
+opam depext taglib mad lame vorbis cry samplerate liquidsoap
+opam install taglib mad lame vorbis cry samplerate liquidsoap
+```
+
+Create liquidsoap script:
+```
+nano shaker.liq
+```
+
+Edit content:
+```
+out = output.icecast(
+    host = "ip",
+    port = 8080,
+    password = "password",
+    name = "radio name",
+    genre = "genre",
+    url = "http://example.com",
+    encoding = "UTF-8"
+)
+
+set("log.file", false)
+set("log.stdout", false)
+
+set("decoder.file_decoders", ["META","MAD","OGG"])
+set("decoder.file_extensions.mad", ["mp3","mp2","mp1"])
+set("decoder.file_extensions.ogg", ["ogv","oga","ogx","ogg","opus"])
+set("decoder.mime_types.ogg", ["application/ogg","application/x-ogg","audio/x-ogg","audio/ogg","video/ogg"])
+set("decoder.mime_types.mp3", ["audio/mpeg","audio/MPA"])
+
+def update_title(m) =
+    title = m["title"]
+    if title == "" or title == "Unknown" then
+        content = m["filename"]
+        content = basename(content)
+        content = get_process_output("STR=\""^content^"\"; echo ${STR%.*}")
+        content = string.recode(out_enc="UTF-8", content)
+        [("title", content)]
+    else
+        sArtist = string.recode(out_enc="UTF-8", m["artist"])
+        sTitle = string.recode(out_enc="UTF-8", m["title"])
+        [("title", sTitle),
+        ("artist", sArtist)]
+    end
+end
+set("tag.encodings", ["UTF-8"])
+
+uploads = playlist(mode="randomize", reload_mode="rounds-1", "/home/user/shaker/public/media/music/uploads/")
+
+radio = uploads
+radio = nrj(radio)
+radio = map_metadata(update_title, radio)
+radio = crossfade(start_next=0.5, fade_out=2., fade_in=1., radio)
+clock.assign_new(id="My Radio",[radio])
+out(
+    %mp3(
+        bitrate=320,
+        samplerate=44100,
+        stereo=true),
+    description="MP3 320 Kbps",
+    mount="stream",
+    mksafe(radio)
+)
 ```
 
 ---
